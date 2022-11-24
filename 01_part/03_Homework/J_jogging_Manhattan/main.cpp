@@ -1,5 +1,62 @@
 #include <iostream>
 #include <set>
+#include <cmath>
+
+std::set<std::pair<int, int>> getNewDet(const std::set<std::pair<int, int>> &setLast,
+                                        const int &t, const int &d, const int &x, const int &y) {
+  std::pair<int, int> temp;
+  std::set<std::pair<int, int>> setNew;
+
+  for (auto dot: setLast) {
+    for (int kJ = t; kJ >= 0; --kJ) {
+      temp.first = dot.first + kJ;
+      temp.second = dot.second + (t - kJ);
+      if (std::abs(temp.first - x) + std::abs(temp.second - y) <= d) {
+        setNew.insert(temp);
+      }
+      temp.first = dot.first - kJ;
+      temp.second = dot.second + (t - kJ);
+      if (std::abs(temp.first - x) + std::abs(temp.second - y) <= d) {
+        setNew.insert(temp);
+      }
+      temp.first = dot.first + kJ;
+      temp.second = dot.second - (t - kJ);
+      if (std::abs(temp.first - x) + std::abs(temp.second - y) <= d) {
+        setNew.insert(temp);
+      }
+      temp.first = dot.first - kJ;
+      temp.second = dot.second - (t - kJ);
+      if (std::abs(temp.first - x) + std::abs(temp.second - y) <= d) {
+        setNew.insert(temp);
+      }
+    }
+
+    for (int kJ = d; kJ >= 0; --kJ) {
+      temp.first = x + kJ;
+      temp.second = y + (d - kJ);
+      if (std::abs(temp.first - dot.first) + std::abs(temp.second - dot.second) <= t) {
+        setNew.insert(temp);
+      }
+      temp.first = x - kJ;
+      temp.second = y + (d - kJ);
+      if (std::abs(temp.first - dot.first) + std::abs(temp.second - dot.second) <= t) {
+        setNew.insert(temp);
+      }
+      temp.first = x + kJ;
+      temp.second = y - (d - kJ);
+      if (std::abs(temp.first - dot.first) + std::abs(temp.second - dot.second) <= t) {
+        setNew.insert(temp);
+      }
+      temp.first = x - kJ;
+      temp.second = y - (d - kJ);
+      if (std::abs(temp.first - dot.first) + std::abs(temp.second - dot.second) <= t) {
+        setNew.insert(temp);
+      }
+    }
+  }
+
+  return setNew;
+}
 
 int main() {
   int t;
@@ -7,64 +64,41 @@ int main() {
   int n;
   int x, y;
   std::set<std::pair<int, int>> setLast;
-  std::set<std::pair<int, int>> setNewT;
-  std::set<std::pair<int, int>> setNewD;
 
   std::cin >> t >> d >> n;
+
   std::pair<int, int> temp(0,0);
   setLast.insert(temp);
 
   for (int kI = 0; kI < n; ++kI) {
     std::cin >> x >> y;
-    for (auto dot: setLast) {
-      for (int kJ = 0; kJ <= t; ++kJ) {
-        for (int k = 0; k <= t - kJ; ++k) {
-          temp.first = dot.first + kJ;
-          temp.second = dot.second + k;
-          setNewT.insert(temp);
-          temp.first = dot.first - kJ;
-          temp.second = dot.second + k;
-          setNewT.insert(temp);
-          temp.first = dot.first + kJ;
-          temp.second = dot.second - k;
-          setNewT.insert(temp);
-          temp.first = dot.first - kJ;
-          temp.second = dot.second - k;
-          setNewT.insert(temp);
+    setLast = getNewDet(setLast, t, d, x, y);
+    }
+
+  bool firstDot = true;
+  std::pair<int, int> innerPoint;
+
+  for (auto dot: setLast) {
+    if (firstDot) {
+      temp = dot;
+      firstDot = false;
+    } else {
+      if (temp.first == dot.first) {
+        for (int kI = temp.second + 1; kI <= dot.second; ++kI) {
+          innerPoint.first = temp.first;
+          innerPoint.second = kI;
+          setLast.insert(innerPoint);
         }
       }
-    }
 
-    for (int kJ = 0; kJ <= d; ++kJ) {
-      for (int k = 0; k <= d - kJ; ++k) {
-        temp.first = x + kJ;
-        temp.second = y + k;
-        setNewD.insert(temp);
-        temp.first = x - kJ;
-        temp.second = y + k;
-        setNewD.insert(temp);
-        temp.first = x + kJ;
-        temp.second = y - k;
-        setNewD.insert(temp);
-        temp.first = x - kJ;
-        temp.second = y - k;
-        setNewD.insert(temp);
-      }
+      temp = dot;
     }
-
-    setLast.clear();
-    for (auto dot: setNewD) {
-      if (setNewT.count(dot)) {
-        setLast.insert(dot);
-      }
-    }
-    setNewT.clear();
-    setNewD.clear();
   }
 
   std::cout << setLast.size()<< std::endl;
   for (auto dot: setLast) {
     std::cout << dot.first << " " << dot.second << std::endl;
   }
+
   return 0;
 }
