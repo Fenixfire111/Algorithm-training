@@ -8,12 +8,16 @@ std::set<std::pair<int, int>> getNewDet(const std::set<std::pair<int, int>> &set
                                         const int &t, const int &d, const int &x, const int &y) {
   std::pair<int, int> temp;
   std::set<std::pair<int, int>> setNew;
+  int maxX = -100000;
 
   for (auto dot: setLast) {
     for (int kJ = t; kJ >= 0; --kJ) {
       temp.first = dot.first + kJ;
       temp.second = dot.second + (t - kJ);
       if (std::abs(temp.first - x) + std::abs(temp.second - y) <= d) {
+        if (maxX < temp.first) {
+          maxX = temp.first;
+        }
         setNew.insert(temp);
       }
       temp.first = dot.first - kJ;
@@ -24,6 +28,9 @@ std::set<std::pair<int, int>> getNewDet(const std::set<std::pair<int, int>> &set
       temp.first = dot.first + kJ;
       temp.second = dot.second - (t - kJ);
       if (std::abs(temp.first - x) + std::abs(temp.second - y) <= d) {
+        if (maxX < temp.first) {
+          maxX = temp.first;
+        }
         setNew.insert(temp);
       }
       temp.first = dot.first - kJ;
@@ -37,6 +44,9 @@ std::set<std::pair<int, int>> getNewDet(const std::set<std::pair<int, int>> &set
       temp.first = x + kJ;
       temp.second = y + (d - kJ);
       if (std::abs(temp.first - dot.first) + std::abs(temp.second - dot.second) <= t) {
+        if (maxX < temp.first) {
+          maxX = temp.first;
+        }
         setNew.insert(temp);
       }
       temp.first = x - kJ;
@@ -47,6 +57,9 @@ std::set<std::pair<int, int>> getNewDet(const std::set<std::pair<int, int>> &set
       temp.first = x + kJ;
       temp.second = y - (d - kJ);
       if (std::abs(temp.first - dot.first) + std::abs(temp.second - dot.second) <= t) {
+        if (maxX < temp.first) {
+          maxX = temp.first;
+        }
         setNew.insert(temp);
       }
       temp.first = x - kJ;
@@ -58,16 +71,21 @@ std::set<std::pair<int, int>> getNewDet(const std::set<std::pair<int, int>> &set
   }
     bool firstDot = true;
     bool secondDot = false;
+    int left;
+    int right = maxX;
 
     for (auto dot: setNew) {
       if (firstDot) {
         firstDot = false;
+        left = dot.first;
       } else {
         if (temp.first == dot.first) {
           if (!secondDot) {
             secondDot = true;
           } else {
-            setNew.erase(temp);
+            if (left != temp.first && right != temp.first) {
+              setNew.erase(temp);
+            }
           }
         } else {
           secondDot = false;
@@ -263,9 +281,9 @@ int main() {
 
   for (int kI = 1; kI < 100; ++kI) {
     for (int kJ = 1; kJ < 100; ++kJ) {
-      for (int k = 1; k <=1;  ++k) {
-       
-        #include <ctime>
+      for (int k = 1; k <=100;  ++k) {
+
+//        #include <ctime>
         srand(time( 0 ) );
 
 //        std::cin >> kI >> kJ >> k;
