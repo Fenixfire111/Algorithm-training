@@ -17,7 +17,7 @@ int main() {
   int place = 1;
   std::vector<std::string> maxWords;
   std::map<std::string, int> places;
-
+  bool noLiter = false;
 
   if (input.is_open()) {
     input >> n >> c >> d;
@@ -36,40 +36,49 @@ int main() {
           for (char sym : line) {
             if ((sym >= 'A' && sym <= 'Z') || (sym >= 'a' && sym <= 'z') ||
                 (sym >= '0' && sym <= '9') || (sym == '_')) {
+              if (!(sym >= '0' && sym <= '9')){
+                noLiter = true;
+              }
               word += sym;
             } else {
               if (!keyWords.count(word)) {
-                ++identifiers[word];
-                if (!places.count(word)){
-                  places[word] = place;
-                  ++place;
-                }
-                if (max < identifiers[word] && (!word.empty())) {
-                  max = identifiers[word];
-                  maxWords.clear();
-                  maxWords.push_back(word);
-                } else if (max == identifiers[word] && (!word.empty())) {
-                  maxWords.push_back(word);
+                if (noLiter) {
+                  ++identifiers[word];
+                  if (!places.count(word)){
+                    places[word] = place;
+                    ++place;
+                  }
+                  if (max < identifiers[word] && (!word.empty())) {
+                    max = identifiers[word];
+                    maxWords.clear();
+                    maxWords.push_back(word);
+                  } else if (max == identifiers[word] && (!word.empty())) {
+                    maxWords.push_back(word);
+                  }
                 }
               }
               word.clear();
+              noLiter = false;
             }
           }
           if (!keyWords.count(word)) {
-            ++identifiers[word];
-            if (!places.count(word)){
-              places[word] = place;
-              ++place;
-            }
-            if (max < identifiers[word] && (!word.empty())) {
-              max = identifiers[word];
-              maxWords.clear();
-              maxWords.push_back(word);
-            } else if (max == identifiers[word] && (!word.empty())) {
-              maxWords.push_back(word);
+            if (noLiter) {
+              ++identifiers[word];
+              if (!places.count(word)){
+                places[word] = place;
+                ++place;
+              }
+              if (max < identifiers[word] && (!word.empty())) {
+                max = identifiers[word];
+                maxWords.clear();
+                maxWords.push_back(word);
+              } else if (max == identifiers[word] && (!word.empty())) {
+                maxWords.push_back(word);
+              }
             }
           }
           word.clear();
+          noLiter = false;
         }
       } else {
         /// d no
@@ -142,40 +151,50 @@ int main() {
             sym = (char)tolower(sym);
             if ((sym >= 'a' && sym <= 'z') ||
                 (sym >= '0' && sym <= '9') || (sym == '_')) {
+              if (!(sym >= '0' && sym <= '9')){
+                noLiter = true;
+              }
               word += sym;
             } else {
               if (!keyWords.count(word)) {
-                ++identifiers[word];
-                if (!places.count(word)){
-                  places[word] = place;
-                  ++place;
+                if (noLiter) {
+                  ++identifiers[word];
+                  if (!places.count(word)){
+                    places[word] = place;
+                    ++place;
+                  }
+                  if (max < identifiers[word] && (!word.empty())) {
+                    max = identifiers[word];
+                    maxWords.clear();
+                    maxWords.push_back(word);
+                  } else if (max == identifiers[word] && (!word.empty())) {
+                    maxWords.push_back(word);
+                  }
                 }
-                if (max < identifiers[word] && (!word.empty())) {
-                  max = identifiers[word];
-                  maxWords.clear();
-                  maxWords.push_back(word);
-                } else if (max == identifiers[word] && (!word.empty())) {
-                  maxWords.push_back(word);
-                }
+
               }
+              noLiter = false;
               word.clear();
             }
           }
           if (!keyWords.count(word)) {
-            ++identifiers[word];
-            if (!places.count(word)){
-              places[word] = place;
-              ++place;
-            }
-            if (max < identifiers[word] && (!word.empty())) {
-              max = identifiers[word];
-              maxWords.clear();
-              maxWords.push_back(word);
-            } else if (max == identifiers[word] && (!word.empty())) {
-              maxWords.push_back(word);
+            if (!keyWords.count(word)) {
+              ++identifiers[word];
+              if (!places.count(word)){
+                places[word] = place;
+                ++place;
+              }
+              if (max < identifiers[word] && (!word.empty())) {
+                max = identifiers[word];
+                maxWords.clear();
+                maxWords.push_back(word);
+              } else if (max == identifiers[word] && (!word.empty())) {
+                maxWords.push_back(word);
+              }
             }
           }
           word.clear();
+          noLiter = false;
         }
       } else {
         /// d no
