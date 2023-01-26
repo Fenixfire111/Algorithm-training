@@ -89,7 +89,8 @@ int main() {
 
         word.clear();
         while (getline(input, line)) {
-          for (char sym : line) {
+          for (int kI = 0; kI < line.size(); ++kI) {
+            char sym = line[kI];
             if ((sym >= 'A' && sym <= 'Z') || (sym >= 'a' && sym <= 'z') ||
                 (sym >= '0' && sym <= '9') || (sym == '_')) {
               if (!(sym >= '0' && sym <= '9')) {
@@ -97,6 +98,15 @@ int main() {
               } else {
                 if (!word.empty()) {
                   word += sym;
+                } else {
+                  int temp = kI + 1;
+                  while ((line[temp] >= 'A' && line[temp] <= 'Z') ||
+                  (line[temp] >= 'a' && line[temp] <= 'z') ||
+                  (line[temp] >= '0' && line[temp] <= '9') || (line[temp] == '_')) {
+                    ++temp;
+                  }
+                  kI = temp - 1;
+                  continue;
                 }
               }
             } else {
@@ -206,7 +216,8 @@ int main() {
 
         word.clear();
         while (getline(input, line)) {
-          for (char sym : line) {
+          for (int kI = 0; kI < line.size(); ++kI) {
+            char sym = line[kI];
             sym = (char)tolower(sym);
             if ((sym >= 'a' && sym <= 'z') ||
                 (sym >= '0' && sym <= '9') || (sym == '_')) {
@@ -215,6 +226,15 @@ int main() {
               } else {
                 if (!word.empty()) {
                   word += sym;
+                } else {
+                  int temp = kI + 1;
+                  while ((line[temp] >= 'A' && line[temp] <= 'Z') ||
+                      (line[temp] >= 'a' && line[temp] <= 'z') ||
+                      (line[temp] >= '0' && line[temp] <= '9') || (line[temp] == '_')) {
+                    ++temp;
+                  }
+                  kI = temp - 1;
+                  continue;
                 }
               }
             } else {
