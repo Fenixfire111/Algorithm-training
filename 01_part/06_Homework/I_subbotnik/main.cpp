@@ -6,35 +6,16 @@ bool check(const long long& numBr, const long long& c,
            const std::vector<long long>& array,
            const std::vector<long long>& sortArray,
            const long long& m)  {
-  long long index;
-  long long min = sortArray[sortArray.size() - 2];
-  long long min2 = sortArray[sortArray.size() - 1];
-
-  for (int kI = 0; kI < array.size(); ++kI) {
-    if (array[kI] == sortArray[m]) {
-      index = kI;
-      break;
-    }
-  }
+  long long countBr = 0;
 
   for (long long kI = 0; kI < array.size(); ++kI) {
-    if (kI == index - c + 1 || index - c + 1 < 0) {
-      if (index + c >= array.size()) {
-        break;
-      } else {
-        kI = index + c;
-      }
-    }
-
-    if (array[kI] < min) {
-      min2 = min;
-      min = array[kI];
-    } else if (array[kI] < min2) {
-      min2 = array[kI];
+    if (array[kI] <= sortArray[m]) {
+      ++countBr;
+      kI += c - 1;
     }
   }
 
-  return min2 <= sortArray[m];
+  return countBr >= numBr;
 }
 
 long long binarySearch(const long long& numBr, const long long& c,
