@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.17)
+project(12_bracket_sequence)
+
+set(CMAKE_CXX_STANDARD 20)
+
+add_executable(12_bracket_sequence main.cpp)
