@@ -6,9 +6,12 @@ int main() {
   int number;
   int side;
   int loc;
-  int newLoc;
-  int newNumber;
-  int newSide;
+  int newLocFirst;
+  int newLocSecond;
+  int newNumberFirst;
+  int newNumberSecond;
+  int newSideFirst;
+  int newSideSecond;
 
   std::cin >> n;
   std::cin >> k;
@@ -16,32 +19,48 @@ int main() {
   std::cin >> side;
 
   loc = (number - 1) * 2 + side;
-//  if (loc > n) {
-//    std::cout << -1 << std::endl;
-//
-//    return 0;
-//  }
-  if (loc + k > n) {
-    if (loc - k > 0) {
-      newLoc = loc - k;
-    } else {
-      std::cout << -1 << std::endl;
 
+  newLocFirst = loc + k;
+  newLocSecond = loc - k;
+
+  if (newLocFirst % 2 == 0) {
+    newSideFirst = 2;
+    newNumberFirst = newLocFirst / 2;
+  } else {
+    newSideFirst = 1;
+    newNumberFirst = newLocFirst / 2 + 1;
+  }
+
+  if (newLocSecond % 2 == 0) {
+    newSideSecond = 2;
+    newNumberSecond = newLocSecond / 2;
+  } else {
+    newSideSecond = 1;
+    newNumberSecond = newLocSecond / 2 + 1;
+  }
+
+
+  if (newLocFirst > n) {
+    if (newLocSecond <= 0) {
+      std::cout << -1;
       return 0;
+    } else {
+      std::cout << newNumberSecond << " " << newSideSecond;
     }
   } else {
-    newLoc = loc + k;
+    if (newLocSecond < 0) {
+      std::cout << newNumberFirst << " " << newSideFirst;
+      return 0;
+    } else {
+      if (std::abs(number - newNumberFirst) > std::abs(number - newNumberSecond)) {
+        std::cout << newNumberSecond << " " << newSideSecond;
+      } else {
+        std::cout << newNumberFirst << " " << newSideFirst;
+      }
+    }
   }
 
-  if (newLoc % 2 == 0) {
-    newSide = 2;
-    newNumber = newLoc / 2;
-  } else {
-    newSide = 1;
-    newNumber = newLoc / 2 + 1;
-  }
 
-  std::cout << newNumber << " " << newSide;
 
   return 0;
 }
